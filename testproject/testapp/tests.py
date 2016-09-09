@@ -5,10 +5,11 @@ from djet import assertions, restframework, utils
 from rest_framework import status
 
 from multitoken import views
-from testproject import settings
+from . import settings
 
 import swapper
 Token = swapper.load_model('multitoken', 'Token')
+
 
 def create_user(**kwargs):
     data = {

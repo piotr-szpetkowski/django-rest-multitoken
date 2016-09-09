@@ -2,7 +2,7 @@ import os
 
 DEBUG = True
 
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DATABASES = {
     'default': {
@@ -46,6 +46,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'testapp.urls'
 
 MULTITOKEN_TOKEN_MODEL = 'testapp.TestToken'
