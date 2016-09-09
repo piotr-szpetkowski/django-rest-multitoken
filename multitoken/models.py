@@ -1,10 +1,13 @@
 import binascii
 import os
+
 from django.conf import settings
 from django.db import models
 
+import swapper
 
-class Token(models.Model):
+
+class BaseToken(models.Model):
     key = models.CharField(max_length=40, primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='auth_tokens')
     client = models.CharField(max_length=255)
@@ -15,11 +18,12 @@ class Token(models.Model):
             'user',
             'client',
         )
+        abstract = True
 
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()
-        return super(Token, self).save(*args, **kwargs)
+        return super(BaseToken, self).save(*args, **kwargs)
 
     def generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
@@ -30,3 +34,11 @@ class Token(models.Model):
     LOGIN_FIELDS = (
         'client',
     )
+
+
+class Token(BaseToken):
+    # todo: add more fields to default implementation?
+
+    class Meta(BaseToken.Meta):
+        swappable = swapper.swappable_setting('multitoken', 'Token')
+        abstract = False

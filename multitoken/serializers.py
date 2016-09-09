@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from . import models, constants
+from . import constants
+
+import swapper
+Token = swapper.load_model('multitoken', 'Token')
 
 User = get_user_model()
 
@@ -9,7 +12,7 @@ class TokenSerializer(serializers.ModelSerializer):
     auth_token = serializers.CharField(source='key')
 
     class Meta:
-        model = models.Token
+        model = Token
         fields = (
             'auth_token',
         )

@@ -1,6 +1,7 @@
 from rest_framework import authentication
-from . import models
+import swapper
+Token = swapper.load_model('multitoken', 'Token')
 
 
 class TokenAuthentication(authentication.TokenAuthentication):
-    model = models.Token
+    model = Token

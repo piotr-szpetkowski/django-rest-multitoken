@@ -47,3 +47,5 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'urls'
+
+MULTITOKEN_TOKEN_MODEL = 'testapp.TestToken'

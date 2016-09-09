@@ -1,5 +1,7 @@
 from django.contrib import admin
-from . import models
+
+import swapper
+Token = swapper.load_model('multitoken', 'Token')
 
 
 class TokenAdmin(admin.ModelAdmin):
@@ -9,4 +11,4 @@ class TokenAdmin(admin.ModelAdmin):
     readonly_fields = ('created',)
 
 
-admin.site.register(models.Token, TokenAdmin)
+admin.site.register(Token, TokenAdmin)

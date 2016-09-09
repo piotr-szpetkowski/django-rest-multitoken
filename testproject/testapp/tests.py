@@ -1,9 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
+from django.test import TestCase
 from djet import assertions, restframework, utils
 from rest_framework import status
-from multitoken import models, views
 
+from multitoken import views
+from testproject import settings
+
+import swapper
+Token = swapper.load_model('multitoken', 'Token')
 
 def create_user(**kwargs):
     data = {
@@ -61,7 +66,7 @@ class LoginViewTest(restframework.APIViewTestCase,
         response = self.view(request)
 
         self.assert_status_equal(response, status.HTTP_400_BAD_REQUEST)
-        with self.assertRaises(models.Token.DoesNotExist):
+        with self.assertRaises(Token.DoesNotExist):
             user.auth_tokens.get()
         self.assertFalse(self.signal_sent)
 
@@ -78,7 +83,7 @@ class LoginViewTest(restframework.APIViewTestCase,
         response = self.view(request)
 
         self.assert_status_equal(response, status.HTTP_400_BAD_REQUEST)
-        with self.assertRaises(models.Token.DoesNotExist):
+        with self.assertRaises(Token.DoesNotExist):
             user.auth_tokens.get()
         self.assertFalse(self.signal_sent)
 
@@ -89,14 +94,14 @@ class LogoutViewTest(restframework.APIViewTestCase,
 
     def test_post_should_logout_logged_in_user(self):
         user = create_user()
-        token = models.Token.objects.create(user=user, client='my-device')
+        token = Token.objects.create(user=user, client='my-device')
 
         request = self.factory.post(user=user, token=token)
         response = self.view(request)
 
         self.assert_status_equal(response, status.HTTP_200_OK)
         self.assertEqual(response.data, None)
-        with self.assertRaises(models.Token.DoesNotExist):
+        with self.assertRaises(Token.DoesNotExist):
             utils.refresh(token)
 
     def test_post_should_deny_logging_out_when_user_not_logged_in(self):
@@ -106,3 +111,9 @@ class LogoutViewTest(restframework.APIViewTestCase,
         response = self.view(request)
 
         self.assert_status_equal(response, status.HTTP_401_UNAUTHORIZED)
+
+
+class SwappableTokenTest(TestCase):
+    def test_is_token_model_swapped(self):
+        swapped_token_model = swapper.is_swapped('multitoken', 'Token')
+        self.assertEqual(swapped_token_model, settings.MULTITOKEN_TOKEN_MODEL)

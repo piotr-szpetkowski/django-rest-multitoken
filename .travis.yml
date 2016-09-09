@@ -4,25 +4,32 @@ python:
   - "2.6"
   - "2.7"
   - "3.4"
+  - "3.5"
 
 env:
   - DJANGO_VERSION=1.5.12 DRF_VERSION=2.4.5
   - DJANGO_VERSION=1.6.11 DRF_VERSION=2.4.5
   - DJANGO_VERSION=1.7.8 DRF_VERSION=2.4.5
-  - DJANGO_VERSION=1.5.12 DRF_VERSION=3.1.3
-  - DJANGO_VERSION=1.6.11 DRF_VERSION=3.1.3
-  - DJANGO_VERSION=1.7.8 DRF_VERSION=3.1.3
-  - DJANGO_VERSION=1.8.2 DRF_VERSION=3.1.3
+  - DJANGO_VERSION=1.5.12 DRF_VERSION=3.4.6
+  - DJANGO_VERSION=1.6.11 DRF_VERSION=3.4.6
+  - DJANGO_VERSION=1.7.8 DRF_VERSION=3.4.6
+  - DJANGO_VERSION=1.8.14 DRF_VERSION=3.4.6
+  - DJANGO_VERSION=1.9.9 DRF_VERSION=3.4.6
+  - DJANGO_VERSION=1.10.1 DRF_VERSION=3.4.6
 
 matrix:
   exclude:
-    # Django 1.7 and 1.8 dropped support for Python 2.6.
+    # Python 2.6 support has been dropped since Django 1.7.
     - python: "2.6"
       env: DJANGO_VERSION=1.7.8 DRF_VERSION=2.4.5
     - python: "2.6"
-      env: DJANGO_VERSION=1.7.8 DRF_VERSION=3.1.3
+      env: DJANGO_VERSION=1.7.8 DRF_VERSION=3.4.6
     - python: "2.6"
-      env: DJANGO_VERSION=1.8.2 DRF_VERSION=3.1.3
+      env: DJANGO_VERSION=1.8.14 DRF_VERSION=3.4.6
+    - python: "2.6"
+      env: DJANGO_VERSION=1.9.9 DRF_VERSION=3.4.6
+    - python: "2.6"
+      env: DJANGO_VERSION=1.10.1 DRF_VERSION=3.4.6
 
 install:
   - pip install -q Django==$DJANGO_VERSION

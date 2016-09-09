@@ -1,3 +1,6 @@
 from django.db import models
+from multitoken import models
 
-# Create your models here.
+
+class TestToken(models.BaseToken):
+    pass
